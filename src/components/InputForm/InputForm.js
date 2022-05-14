@@ -1,6 +1,6 @@
 import React from 'react';
 
-const InputForm = () => {
+const InputForm = ({handlePost}) => {
     return (
         <div className=" p-3 color-4D4C7D">
             <form className="container " onSubmit={handlePost}>
