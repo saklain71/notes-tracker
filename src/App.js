@@ -11,11 +11,14 @@ function App() {
 
   //get data
   const [notes, setNotes] = useState([]);
+  //const [ isReload, setISReload] = useState(false); 
+  //const [isReload, setISReload] = useState(false);
+
   useEffect(() => {
     fetch(`http://localhost:5000/notes`)
       .then(res => res.json())
       .then(data => setNotes(data))
-  }, []);
+  }, [notes]);
   /*
 1. here there will be a function named handleSearch
 to handle search by query, and it will be passed as props to header
@@ -32,27 +35,45 @@ to handle search by query, and it will be passed as props to header
     }
   };
 
+  /*2. here there will be a function named handleDelete
+to delete a note, and it will be passed as props to NoteCard that will be triggered using delete button.
+*/
+
+  const handleDelete = (id) => {
+    fetch(`http://localhost:5000/note/${id}`, {
+      method: "DELETE",
+    })
+      .then(res => res.json())
+      .then(data => {
+        console.log(data)
+      });
+  }
+
+
+
   /*
 4.  there will be a function named handlePost
 to post data to backend, and it will be passed as props to InputFrom.
  */
 
-const handlePost =(event)=>{
-  event.preventDefault();
-  const userName = event.target.userName.value;
-  const textData = event.target.textData.value;
+  const handlePost = (event) => {
+    event.preventDefault();
+    const userName = event.target.userName.value;
+    const textData = event.target.textData.value;
 
-  fetch('http://localhost:5000/note', {
-    method: 'POST',
-    headers : {
-      'Content-type': 'application/json; charset=UTF-8',
-    },
-    body: JSON.stringify({ userName , textData })
-  })
-  .then(res => res.json())
-  .then(data => console.log(data))
+    fetch('http://localhost:5000/note', {
+      method: 'POST',
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8',
+      },
+      body: JSON.stringify({ userName, textData })
+    })
+      .then(res => res.json())
+      .then(data => console.log(data))
+    // reload useetate
+    // setISReload(isReload);
 
-}
+  }
 
 
 
@@ -67,6 +88,9 @@ const handlePost =(event)=>{
             <NoteCard
               key={note._id}
               note={note}
+              handleDelete={handleDelete}
+              // setIsReload={setIsReload}
+              // isReload={isReload}
             />
           )}
       </div>
